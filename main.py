@@ -109,25 +109,6 @@ async def process_word_file(file: UploadFile = File(...)):
 async def get_uploaded_files():
     return {"files": uploaded_files_info}
 
-# 업로드된 파일 내용 반환 API
-@app.get("/file_content/{filename}")
-async def get_file_content(filename: str):
-    # 파일 경로 설정
-    file_location = f"uploaded_files/{filename}"
-    
-    # 파일이 존재하는지 확인
-    if not os.path.exists(file_location):
-        return {"error": "File not found"}
-
-    # 워드 파일 내용 읽기
-    doc = Document(file_location)
-    full_text = []
-    for para in doc.paragraphs:
-        full_text.append(para.text)
-
-    # 파일 내용을 반환
-    return {"filename": filename, "content": "\n".join(full_text)}
-
 # 파일 이름 변경 API
 @app.post("/rename_file")
 async def rename_file(old_filename: str = Form(...), new_filename: str = Form(...)):
@@ -155,6 +136,49 @@ async def rename_file(old_filename: str = Form(...), new_filename: str = Form(..
             file_info["filename"] = os.path.basename(new_file_path)
 
     return {"message": "File renamed successfully", "new_filename": os.path.basename(new_file_path)}
+
+# 파일 내용 저장 API
+@app.post("/save_file_content")
+async def save_file_content(filename: str = Form(...), content: str = Form(...)):
+    file_location = f"uploaded_files/{filename}"
+    
+    # 파일이 존재하는지 확인
+    if not os.path.exists(file_location):
+        return {"error": "File not found"}
+
+    # 워드 파일 내용을 업데이트
+    doc = Document()
+    # 하나의 패러그래프로 텍스트를 처리하고 줄바꿈(\n)을 유지
+    paragraph = doc.add_paragraph()
+    for line in content.split("\n"):
+        paragraph.add_run(line)
+        # paragraph.add_run("\n")  # 줄바꿈을 그대로 추가
+
+    doc.save(file_location)
+
+    return {"message": "File content saved successfully"}
+
+
+# 업로드된 파일 내용 반환 API
+@app.get("/file_content/{filename}")
+async def get_file_content(filename: str):
+    # 파일 경로 설정
+    file_location = f"uploaded_files/{filename}"
+    
+    # 파일이 존재하는지 확인
+    if not os.path.exists(file_location):
+        return {"error": "File not found"}
+
+    # 워드 파일 내용 읽기
+    doc = Document(file_location)
+    
+    full_text = []
+    for para in doc.paragraphs:
+        full_text.append(para.text)
+
+    # 파일 내용을 반환
+    return {"filename": filename, "content": "\n".join(full_text)}
+
 
 if __name__ == "__main__":
     import uvicorn

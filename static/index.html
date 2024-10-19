@@ -22,8 +22,9 @@
     </ul>
 
     <h2>Show File Content</h2>
-    <!-- 텍스트 박스를 사용하여 파일 내용 표시 -->
-    <textarea id="fileContent" class="file-content" style="width: 90%; height: 300px;" readonly></textarea>
+    <!-- 텍스트 박스를 사용하여 파일 내용 표시 및 수정 가능 -->
+    <textarea id="fileContent" class="file-content" style="width: 90%; height: 300px;"></textarea>
+    <button id="saveButton" style="display: none;">Save</button> <!-- 저장하기 버튼 추가 -->
 
     <script>
         let currentFilename = '';  // 현재 선택된 파일 이름 저장
@@ -74,10 +75,32 @@
             } else {
                 currentFilename = filename;  // 현재 파일 이름 저장
                 const fileContentTextArea = document.getElementById('fileContent');
+                const saveButton = document.getElementById('saveButton');
+
                 fileContentTextArea.value = data.content;  // 파일 내용을 textarea에 표시
-                fileContentTextArea.style.display = "block";   // 파일 내용을 불러오면 textarea를 보이게 함
+                fileContentTextArea.style.display = "block";   // textarea 보이기
+                saveButton.style.display = "block";  // 저장 버튼 보이기
             }
         }
+
+        // 파일 내용 저장 요청 함수
+        document.getElementById('saveButton').addEventListener('click', async function() {
+            const fileContentTextArea = document.getElementById('fileContent');
+            const formData = new FormData();
+            formData.append('filename', currentFilename);
+            formData.append('content', fileContentTextArea.value);
+
+            const response = await fetch('/save_file_content', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                alert('File saved successfully');
+            } else {
+                alert('Failed to save file');
+            }
+        });
 
         // 파일 삭제 요청 함수
         async function deleteFile(filename) {
