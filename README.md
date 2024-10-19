@@ -1,11 +1,9 @@
 
 # Langchain Rag FastAPI
 
-## Section 2.4 파일 관리 
+## Section 2.5 텍스트 박스 수정 및 저장하기  
 
-파일 업로드하고 이미 업로드한 파일들을 보여주기 
-
-파일들 삭제 및 이름 바꾸기 적용 
+텍스트 박스 수정 및 저장하기 
 
 
 > pip install -r requirements.txt 
