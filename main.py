@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -72,7 +72,6 @@ async def process_word_file(file: UploadFile = File(...)):
 async def get_uploaded_files():
     return {"files": uploaded_files_info}
 
-
 # 업로드된 파일 내용 반환 API
 @app.get("/file_content/{filename}")
 async def get_file_content(filename: str):
@@ -92,6 +91,26 @@ async def get_file_content(filename: str):
     # 파일 내용을 반환
     return {"filename": filename, "content": "\n".join(full_text)}
 
+# 파일 이름 변경 API
+@app.post("/rename_file")
+async def rename_file(old_filename: str = Form(...), new_filename: str = Form(...)):
+    upload_dir = "uploaded_files"
+    old_file_path = os.path.join(upload_dir, old_filename)
+    new_file_path = os.path.join(upload_dir, new_filename)
+
+    # 파일이 존재하는지 확인
+    if not os.path.exists(old_file_path):
+        return {"error": "File not found"}
+
+    # 파일 이름 변경
+    os.rename(old_file_path, new_file_path)
+
+    # 리스트에서도 파일 이름 변경
+    for file_info in uploaded_files_info:
+        if file_info["filename"] == old_filename:
+            file_info["filename"] = new_filename
+
+    return {"message": "File renamed successfully", "new_filename": new_filename}
 
 if __name__ == "__main__":
     import uvicorn

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My FastAPI App</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <h1>Welcome to My FastAPI App</h1>
@@ -22,8 +22,8 @@
     </ul>
 
     <h2>Show File Context</h2>
-    <button id="toggleButton">Show/Hide File Content</button> <!-- 토글 버튼 추가 -->
-    <div id="fileContent" class="file-content" style="display: none;"></div> <!-- 처음엔 숨김 상태 -->
+    <button id="toggleButton">Show/Hide File Content</button>
+    <div id="fileContent" class="file-content" style="display: none;"></div>
 
     <script>
         // 파일 업로드 처리
@@ -55,9 +55,10 @@
 
             data.files.forEach(file => {
                 const listItem = document.createElement('li');
-                listItem.textContent = `${file.filename} (Uploaded on: ${file.upload_time})`;
-                listItem.style.cursor = 'pointer';
-                listItem.onclick = () => loadFileContent(file.filename);  // 클릭 시 파일 내용을 로드
+                listItem.innerHTML = `
+                    <span onclick="loadFileContent('${file.filename}')">${file.filename} (Uploaded on: ${file.upload_time})</span>
+                    <button onclick="renameFilePrompt('${file.filename}')">Rename</button>
+                `;
                 fileList.appendChild(listItem);
             });
         }
@@ -72,6 +73,33 @@
                 const fileContentDiv = document.getElementById('fileContent');
                 fileContentDiv.innerText = data.content;  // 파일 내용을 div에 표시
                 fileContentDiv.style.display = "block";   // 파일 내용을 불러오면 div를 보이게 함
+            }
+        }
+
+        // 파일 이름 변경을 위한 프롬프트
+        function renameFilePrompt(oldFilename) {
+            const newFilename = prompt("Enter new filename:", oldFilename);
+            if (newFilename && newFilename !== oldFilename) {
+                renameFile(oldFilename, newFilename);
+            }
+        }
+
+        // 파일 이름 변경 요청
+        async function renameFile(oldFilename, newFilename) {
+            const formData = new FormData();
+            formData.append('old_filename', oldFilename);
+            formData.append('new_filename', newFilename);
+
+            const response = await fetch('/rename_file', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                alert('File renamed successfully');
+                loadUploadedFiles();  // 파일 목록 다시 불러오기
+            } else {
+                alert('Failed to rename file');
             }
         }
 
