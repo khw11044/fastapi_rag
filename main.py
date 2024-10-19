@@ -72,6 +72,27 @@ async def process_word_file(file: UploadFile = File(...)):
 async def get_uploaded_files():
     return {"files": uploaded_files_info}
 
+
+# 업로드된 파일 내용 반환 API
+@app.get("/file_content/{filename}")
+async def get_file_content(filename: str):
+    # 파일 경로 설정
+    file_location = f"uploaded_files/{filename}"
+    
+    # 파일이 존재하는지 확인
+    if not os.path.exists(file_location):
+        return {"error": "File not found"}
+
+    # 워드 파일 내용 읽기
+    doc = Document(file_location)
+    full_text = []
+    for para in doc.paragraphs:
+        full_text.append(para.text)
+
+    # 파일 내용을 반환
+    return {"filename": filename, "content": "\n".join(full_text)}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

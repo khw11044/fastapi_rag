@@ -21,6 +21,10 @@
         <!-- 업로드된 파일 목록이 여기 표시됨 -->
     </ul>
 
+    <h2>Show File Context</h2>
+    <button id="toggleButton">Show/Hide File Content</button> <!-- 토글 버튼 추가 -->
+    <div id="fileContent" class="file-content" style="display: none;"></div> <!-- 처음엔 숨김 상태 -->
+
     <script>
         // 파일 업로드 처리
         document.getElementById('uploadForm').addEventListener('submit', async function(event) {
@@ -52,9 +56,34 @@
             data.files.forEach(file => {
                 const listItem = document.createElement('li');
                 listItem.textContent = `${file.filename} (Uploaded on: ${file.upload_time})`;
+                listItem.style.cursor = 'pointer';
+                listItem.onclick = () => loadFileContent(file.filename);  // 클릭 시 파일 내용을 로드
                 fileList.appendChild(listItem);
             });
         }
+
+        // 선택한 파일의 내용을 불러와서 div에 표시하는 함수
+        async function loadFileContent(filename) {
+            const response = await fetch(`/file_content/${filename}`);
+            const data = await response.json();
+            if (data.error) {
+                alert('Error loading file content');
+            } else {
+                const fileContentDiv = document.getElementById('fileContent');
+                fileContentDiv.innerText = data.content;  // 파일 내용을 div에 표시
+                fileContentDiv.style.display = "block";   // 파일 내용을 불러오면 div를 보이게 함
+            }
+        }
+
+        // 토글 버튼으로 파일 내용 보이기/숨기기
+        document.getElementById('toggleButton').addEventListener('click', function() {
+            const fileContentDiv = document.getElementById('fileContent');
+            if (fileContentDiv.style.display === "none" || fileContentDiv.style.display === "") {
+                fileContentDiv.style.display = "block";  // 보이게
+            } else {
+                fileContentDiv.style.display = "none";   // 숨기기
+            }
+        });
 
         // 페이지 로드 시 업로드된 파일 목록 불러오기
         window.onload = loadUploadedFiles;
