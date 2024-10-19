@@ -109,6 +109,11 @@ async def process_word_file(file: UploadFile = File(...)):
 async def get_uploaded_files():
     return {"files": uploaded_files_info}
 
+# '내 자소서 쓰기' 페이지
+@app.get("/write")
+async def write_page():
+    return FileResponse('static/write.html')
+
 # 파일 이름 변경 API
 @app.post("/rename_file")
 async def rename_file(old_filename: str = Form(...), new_filename: str = Form(...)):

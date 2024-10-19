@@ -69,3 +69,34 @@ span.file-item:hover {
     background-color: #e0f7ff !important; /* 옅은 파란색 배경 */
     transition: color 0.3s ease, background-color 0.3s ease; /* 부드러운 애니메이션 */
 }
+
+/* 네비게이션 바 스타일 */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 15px;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.navbar .logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar .nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.navbar .nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.navbar .nav-links a:hover {
+    text-decoration: underline;
+}
