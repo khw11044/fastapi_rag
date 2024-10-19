@@ -9,8 +9,55 @@
 <body>
     <h1>Welcome to My FastAPI App</h1>
     <p>This is a basic web page served with FastAPI.</p>
-    <button onclick="showMessage()">Click Me</button>
-    <p id="message"></p>
-    <script src="/static/script.js"></script> 
+    
+    <h2>Upload a Word File</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="wordFile" accept=".docx, .doc">
+        <button type="submit">Upload</button>
+    </form>
+
+    <h2>Uploaded Files</h2>
+    <ul id="fileList">
+        <!-- 업로드된 파일 목록이 여기 표시됨 -->
+    </ul>
+
+    <script>
+        // 파일 업로드 처리
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('wordFile');
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            const response = await fetch('/process_word', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                alert('File uploaded successfully');
+                loadUploadedFiles();
+            } else {
+                alert('Failed to upload file');
+            }
+        });
+
+        // 업로드된 파일 목록을 불러오는 함수
+        async function loadUploadedFiles() {
+            const response = await fetch('/uploaded_files');
+            const data = await response.json();
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';  // 기존 목록 초기화
+
+            data.files.forEach(file => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${file.filename} (Uploaded on: ${file.upload_time})`;
+                fileList.appendChild(listItem);
+            });
+        }
+
+        // 페이지 로드 시 업로드된 파일 목록 불러오기
+        window.onload = loadUploadedFiles;
+    </script>
 </body>
 </html>

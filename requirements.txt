@@ -1,0 +1,11 @@
+faiss-cpu
+langchain
+langchain_text_splitters
+langchain_community 
+langchain_core 
+langchain_openai
+fastapi
+uvicorn
+beautifulsoup4
+python-dotenv
+python-docx
