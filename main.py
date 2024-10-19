@@ -22,6 +22,14 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 async def root():                                   # 비동기처리: 여러 사용자들이 한꺼번에 홈페이지에 들어오더라도 여러가지 작업을 한꺼번에 처리할 수 있게 해줌 
     return FileResponse('static/index.html')
 
+from pydantic import BaseModel
+class WORDInput(BaseModel):
+    word: ??
+
+@app.post("/process_word")
+async def process_url(word_input: WORDInput): 
+    ??
+    
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
