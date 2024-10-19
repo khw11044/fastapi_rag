@@ -3,6 +3,12 @@
 
 ## Section 3.1 주어진 워드파일들로 Documents 만들기 or DB화 하기 
 
+
+![image](https://github.com/user-attachments/assets/f0cc199e-7dcf-437c-9c29-9e8aed3689dd)
+
+일단 현재까지 한것
+
+
 Sparse를 하든 Dense를 하든 DB화 하기 
 
 이후에 '내 자소서 쓰기'에서 RAG가 내가 준비한 자소서 기반으로 
