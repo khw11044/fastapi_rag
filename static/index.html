@@ -11,9 +11,9 @@
     <p>This is a basic web page served with FastAPI.</p>
     
     <h2>Upload a Word File</h2>
+    <!-- Upload 버튼을 없애고 파일 선택 시 자동 업로드 -->
     <form id="uploadForm" enctype="multipart/form-data">
         <input type="file" id="wordFile" accept=".docx, .doc">
-        <button type="submit">Upload</button>
     </form>
 
     <h2>Uploaded Files</h2>
@@ -21,15 +21,16 @@
         <!-- 업로드된 파일 목록이 여기 표시됨 -->
     </ul>
 
-    <h2>Show File Context</h2>
-    <button id="toggleButton">Show/Hide File Content</button>
-    <div id="fileContent" class="file-content" style="display: none;"></div>
+    <h2>Show File Content</h2>
+    <!-- 텍스트 박스를 사용하여 파일 내용 표시 -->
+    <textarea id="fileContent" class="file-content" style="width: 90%; height: 300px;" readonly></textarea>
 
     <script>
-        // 파일 업로드 처리
-        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const fileInput = document.getElementById('wordFile');
+        let currentFilename = '';  // 현재 선택된 파일 이름 저장
+
+        // 파일 선택 시 자동으로 업로드
+        document.getElementById('wordFile').addEventListener('change', async function(event) {
+            const fileInput = event.target;
             const formData = new FormData();
             formData.append('file', fileInput.files[0]);
 
@@ -40,7 +41,7 @@
 
             if (response.ok) {
                 alert('File uploaded successfully');
-                loadUploadedFiles();
+                loadUploadedFiles();  // 파일 목록 다시 로드
             } else {
                 alert('Failed to upload file');
             }
@@ -56,23 +57,45 @@
             data.files.forEach(file => {
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <span onclick="loadFileContent('${file.filename}')">${file.filename} (Uploaded on: ${file.upload_time})</span>
+                    <span onclick="loadFileContent('${file.filename}')" class="file-item">${file.filename} (Uploaded on: ${file.upload_time})</span>
                     <button onclick="renameFilePrompt('${file.filename}')">Rename</button>
+                    <button onclick="deleteFile('${file.filename}')">Delete</button> <!-- 삭제 버튼 추가 -->
                 `;
                 fileList.appendChild(listItem);
             });
         }
 
-        // 선택한 파일의 내용을 불러와서 div에 표시하는 함수
+        // 선택한 파일의 내용을 불러와서 textarea에 표시하는 함수
         async function loadFileContent(filename) {
             const response = await fetch(`/file_content/${filename}`);
             const data = await response.json();
             if (data.error) {
                 alert('Error loading file content');
             } else {
-                const fileContentDiv = document.getElementById('fileContent');
-                fileContentDiv.innerText = data.content;  // 파일 내용을 div에 표시
-                fileContentDiv.style.display = "block";   // 파일 내용을 불러오면 div를 보이게 함
+                currentFilename = filename;  // 현재 파일 이름 저장
+                const fileContentTextArea = document.getElementById('fileContent');
+                fileContentTextArea.value = data.content;  // 파일 내용을 textarea에 표시
+                fileContentTextArea.style.display = "block";   // 파일 내용을 불러오면 textarea를 보이게 함
+            }
+        }
+
+        // 파일 삭제 요청 함수
+        async function deleteFile(filename) {
+            if (confirm(`Are you sure you want to delete ${filename}?`)) {
+                const formData = new FormData();
+                formData.append('filename', filename);
+
+                const response = await fetch('/delete_file', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('File deleted successfully');
+                    loadUploadedFiles();  // 파일 목록 다시 로드
+                } else {
+                    alert('Failed to delete file');
+                }
             }
         }
 
@@ -102,16 +125,6 @@
                 alert('Failed to rename file');
             }
         }
-
-        // 토글 버튼으로 파일 내용 보이기/숨기기
-        document.getElementById('toggleButton').addEventListener('click', function() {
-            const fileContentDiv = document.getElementById('fileContent');
-            if (fileContentDiv.style.display === "none" || fileContentDiv.style.display === "") {
-                fileContentDiv.style.display = "block";  // 보이게
-            } else {
-                fileContentDiv.style.display = "none";   // 숨기기
-            }
-        });
 
         // 페이지 로드 시 업로드된 파일 목록 불러오기
         window.onload = loadUploadedFiles;

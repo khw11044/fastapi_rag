@@ -32,6 +32,43 @@ uploaded_files_info = []
 async def root():
     return FileResponse('static/index.html')
 
+@app.on_event("startup")
+async def load_existing_files():
+    upload_dir = "uploaded_files"
+    
+    # 폴더가 존재하면 파일 목록을 가져와서 업데이트
+    if os.path.exists(upload_dir):
+        uploaded_files_info.clear()  # 기존 목록을 초기화
+        for filename in os.listdir(upload_dir):
+            file_path = os.path.join(upload_dir, filename)
+            if os.path.isfile(file_path):
+                # 파일이 존재하면 목록에 추가
+                upload_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                uploaded_files_info.append({
+                    "filename": filename,
+                    "upload_time": upload_time
+                })
+
+@app.post("/delete_file")
+async def delete_file(filename: str = Form(...)):
+    upload_dir = "uploaded_files"
+    file_path = os.path.join(upload_dir, filename)
+
+    # 파일이 존재하는지 확인
+    if not os.path.exists(file_path):
+        return {"error": "File not found"}
+
+    try:
+        # 파일 삭제
+        os.remove(file_path)
+    except Exception as e:
+        return {"error": f"Failed to delete file: {str(e)}"}
+
+    # uploaded_files_info 리스트에서도 파일 정보 삭제
+    uploaded_files_info[:] = [file for file in uploaded_files_info if file["filename"] != filename]
+
+    return {"message": "File deleted successfully"}
+
 # 워드 파일 업로드 및 처리
 @app.post("/process_word")
 async def process_word_file(file: UploadFile = File(...)):
@@ -102,15 +139,22 @@ async def rename_file(old_filename: str = Form(...), new_filename: str = Form(..
     if not os.path.exists(old_file_path):
         return {"error": "File not found"}
 
+    # 새로운 파일 이름이 이미 존재할 경우, 숫자를 추가하여 고유하게 만듦
+    base, ext = os.path.splitext(new_file_path)
+    counter = 1
+    while os.path.exists(new_file_path):
+        new_file_path = f"{base} ({counter}){ext}"
+        counter += 1
+
     # 파일 이름 변경
     os.rename(old_file_path, new_file_path)
 
     # 리스트에서도 파일 이름 변경
     for file_info in uploaded_files_info:
         if file_info["filename"] == old_filename:
-            file_info["filename"] = new_filename
+            file_info["filename"] = os.path.basename(new_file_path)
 
-    return {"message": "File renamed successfully", "new_filename": new_filename}
+    return {"message": "File renamed successfully", "new_filename": os.path.basename(new_file_path)}
 
 if __name__ == "__main__":
     import uvicorn

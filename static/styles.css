@@ -1,8 +1,14 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    text-align: center;
-    padding: 50px;
+    text-align: left;  /* 왼쪽 정렬 */
+    margin: 20px !important;
+    padding: 20px !important;
+}
+
+.container {
+    padding-left: 20px !important;  /* 모든 요소에 왼쪽 패딩 추가 */
+    padding-right: 20px !important; /* 오른쪽에도 패딩 추가 */
 }
 
 h1 {
@@ -35,6 +41,7 @@ button:hover {
     margin: 20px auto; /* 가운데 정렬 */
     border-radius: 5px; /* 박스 모서리를 둥글게 설정 */
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); /* 가벼운 그림자 효과 */
+    margin-bottom: 10px;
 }
 
 /* 리스트 항목에 마우스를 올리면 손 모양으로 변경 */
