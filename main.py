@@ -3,12 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from pydantic import BaseModel
 import shutil
 import os
 from pathlib import Path
 from docx import Document
 from datetime import datetime
+import yaml
 
 app = FastAPI()
 
@@ -27,6 +27,16 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # 업로드된 파일 정보 저장을 위한 리스트
 uploaded_files_info = []
 
+
+def split_paragraphs(file):
+    """워드 파일을 단락별로 나누어 리스트로 반환"""
+    doc = Document(file)
+    contexts = [para.text for para in doc.paragraphs]
+    contexts = "\n".join(contexts)
+    paragraphs = contexts.split('\n\n')
+    return [p.strip() for p in paragraphs if p.strip()]
+
+
 # 루트 페이지
 @app.get("/")
 async def root():
@@ -38,162 +48,150 @@ async def root():
 async def write_page():
     return FileResponse('static/write.html')
 
+
 @app.on_event("startup")
 async def load_existing_files():
     upload_dir = "uploaded_files"
-    
+
     # 폴더가 존재하면 파일 목록을 가져와서 업데이트
     if os.path.exists(upload_dir):
         uploaded_files_info.clear()  # 기존 목록을 초기화
         for filename in os.listdir(upload_dir):
             file_path = os.path.join(upload_dir, filename)
             if os.path.isfile(file_path):
-                # 파일이 존재하면 목록에 추가
                 upload_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 uploaded_files_info.append({
                     "filename": filename,
                     "upload_time": upload_time
                 })
 
+
 @app.post("/delete_file")
 async def delete_file(filename: str = Form(...)):
     upload_dir = "uploaded_files"
     file_path = os.path.join(upload_dir, filename)
 
-    # 파일이 존재하는지 확인
     if not os.path.exists(file_path):
         return {"error": "File not found"}
 
     try:
-        # 파일 삭제
         os.remove(file_path)
     except Exception as e:
         return {"error": f"Failed to delete file: {str(e)}"}
 
-    # uploaded_files_info 리스트에서도 파일 정보 삭제
     uploaded_files_info[:] = [file for file in uploaded_files_info if file["filename"] != filename]
-
     return {"message": "File deleted successfully"}
 
-# 워드 파일 업로드 및 처리
+
 @app.post("/process_word")
 async def process_word_file(file: UploadFile = File(...)):
-    # 업로드된 파일을 저장할 폴더 경로
     upload_dir = "uploaded_files"
-    
-    # 디렉터리가 없으면 생성
     if not os.path.exists(upload_dir):
         os.makedirs(upload_dir)
 
-    # 파일 확장자 확인
     if not file.filename.endswith((".docx", ".doc")):
         return {"error": "Invalid file type. Please upload a .docx or .doc file."}
 
-    # 파일 이름 중복 방지 - 같은 이름이 있으면 (1), (2) 등을 붙임
-    file_location = f"{upload_dir}/{file.filename}"
-    base, ext = os.path.splitext(file_location)
+    yaml_filename = f"{upload_dir}/{file.filename.split('.')[0]}.yaml"
+    base, ext = os.path.splitext(yaml_filename)
     counter = 1
 
-    while os.path.exists(file_location):
-        file_location = f"{base} ({counter}){ext}"
+    while os.path.exists(yaml_filename):
+        yaml_filename = f"{base} ({counter}){ext}"
         counter += 1
 
-    # 업로드한 파일을 임시로 저장
-    with open(file_location, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    paragraphs = split_paragraphs(file.file)
+    yaml_content = {
+        "에세이": {f"질문{i+1}": para for i, para in enumerate(paragraphs)}
+    }
 
-    # 파일 이름과 업로드 날짜 기록
+    with open(yaml_filename, "w", encoding="utf-8") as yaml_file:
+        yaml.dump(yaml_content, yaml_file, allow_unicode=True)
+
     upload_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     uploaded_files_info.append({
-        "filename": os.path.basename(file_location),  # 파일 이름에 번호가 붙은 경우를 처리
+        "filename": os.path.basename(yaml_filename),
         "upload_time": upload_time
     })
 
-    # 워드 파일 내용 읽기
-    doc = Document(file_location)
-    full_text = []
-    for para in doc.paragraphs:
-        full_text.append(para.text)
-    
-    # 워드 파일 내용을 반환
-    return {"filename": os.path.basename(file_location), "content": "\n".join(full_text)}
+    return {"filename": os.path.basename(yaml_filename), "content": yaml_content}
 
-# 업로드된 파일 목록 제공 API
+
 @app.get("/uploaded_files")
 async def get_uploaded_files():
     return {"files": uploaded_files_info}
 
 
-
-# 파일 이름 변경 API
 @app.post("/rename_file")
 async def rename_file(old_filename: str = Form(...), new_filename: str = Form(...)):
     upload_dir = "uploaded_files"
     old_file_path = os.path.join(upload_dir, old_filename)
     new_file_path = os.path.join(upload_dir, new_filename)
 
-    # 파일이 존재하는지 확인
     if not os.path.exists(old_file_path):
         return {"error": "File not found"}
 
-    # 새로운 파일 이름이 이미 존재할 경우, 숫자를 추가하여 고유하게 만듦
     base, ext = os.path.splitext(new_file_path)
     counter = 1
     while os.path.exists(new_file_path):
         new_file_path = f"{base} ({counter}){ext}"
         counter += 1
 
-    # 파일 이름 변경
     os.rename(old_file_path, new_file_path)
 
-    # 리스트에서도 파일 이름 변경
     for file_info in uploaded_files_info:
         if file_info["filename"] == old_filename:
             file_info["filename"] = os.path.basename(new_file_path)
 
     return {"message": "File renamed successfully", "new_filename": os.path.basename(new_file_path)}
 
-# 파일 내용 저장 API
+
 @app.post("/save_file_content")
-async def save_file_content(filename: str = Form(...), content: str = Form(...)):
+async def save_file_content(data: dict):
+    filename = data["filename"]
+    content = data["content"]
+
     file_location = f"uploaded_files/{filename}"
-    
-    # 파일이 존재하는지 확인
+
     if not os.path.exists(file_location):
         return {"error": "File not found"}
 
-    # 워드 파일 내용을 업데이트
-    doc = Document()
-    # 하나의 패러그래프로 텍스트를 처리하고 줄바꿈(\n)을 유지
-    paragraph = doc.add_paragraph()
-    for line in content.split("\n"):
-        paragraph.add_run(line)
-        # paragraph.add_run("\n")  # 줄바꿈을 그대로 추가
+    with open(file_location, "r", encoding="utf-8") as yaml_file:
+        yaml_content = yaml.safe_load(yaml_file)
 
-    doc.save(file_location)
+    # ['기업이름']과 ['지원직무'] 추가
+    yaml_content["기업이름"] = content.get("기업이름", "")
+    yaml_content["지원직무"] = content.get("지원직무", "")
+
+    # ['에세이'] 내의 질문 내용 업데이트
+    for key, value in content.items():
+        if key.startswith("질문"):
+            yaml_content["에세이"][key] = value
+
+    with open(file_location, "w", encoding="utf-8") as yaml_file:
+        yaml.dump(yaml_content, yaml_file, allow_unicode=True)
 
     return {"message": "File content saved successfully"}
 
 
-# 업로드된 파일 내용 반환 API
 @app.get("/file_content/{filename}")
 async def get_file_content(filename: str):
-    # 파일 경로 설정
     file_location = f"uploaded_files/{filename}"
-    
-    # 파일이 존재하는지 확인
+
     if not os.path.exists(file_location):
         return {"error": "File not found"}
 
-    # 워드 파일 내용 읽기
-    doc = Document(file_location)
-    
-    full_text = []
-    for para in doc.paragraphs:
-        full_text.append(para.text)
+    with open(file_location, "r", encoding="utf-8") as yaml_file:
+        yaml_content = yaml.safe_load(yaml_file)
 
-    # 파일 내용을 반환
-    return {"filename": filename, "content": "\n".join(full_text)}
+    return {
+        "filename": filename,
+        "content": {
+            "기업이름": yaml_content.get("기업이름", ""),  # 기업이름 반환
+            "지원직무": yaml_content.get("지원직무", ""),  # 지원직무 반환
+            "에세이": yaml_content.get("에세이", {})  # 에세이 내용 반환
+        }
+    }
 
 
 if __name__ == "__main__":

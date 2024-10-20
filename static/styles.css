@@ -27,21 +27,53 @@ button:hover {
     background-color: #005f5f;
 }
 
-/* div에 스타일 적용 */
-.file-content {
-    width: 90%;
-    height: 600px;
+/* 질문별 문단을 보여주는 텍스트박스 스타일 */
+textarea.question-box {
+    width: 60%;  /* 텍스트박스 너비를 60%로 설정 */
+    height: 300px; /* 질문별 텍스트박스 높이 설정 */
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    overflow-y: auto;  /* 내용이 길 경우 스크롤 생성 */
-    background-color: #f0f0f0; /* 연한 회색 배경 */
-    white-space: pre-wrap; /* 줄바꿈을 유지한 채 텍스트 표시 */
-    margin: 20px auto; /* 가운데 정렬 */
-    border-radius: 5px; /* 박스 모서리를 둥글게 설정 */
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); /* 가벼운 그림자 효과 */
-    margin-bottom: 10px;
+    overflow-y: auto;
+    background-color: #f0f0f0;
+    white-space: pre-wrap;
+    margin: 20px auto;
+    border-radius: 5px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;  /* 텍스트박스 간 간격 추가 */
+    line-height: 1.5; /* 줄 간격 설정 */
+}
+
+/* 기업이름, 지원직무 텍스트 입력 상자 스타일 */
+input[type="text"].company-box, textarea.job-box {
+    width: 60%;  /* 텍스트박스 너비를 60%로 설정 */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #bbb;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    white-space: pre-wrap;
+    margin: 20px auto;
+    border-radius: 5px;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;  /* 텍스트박스 간 간격 추가 */
+}
+
+input[type="text"].company-box {
+    height: 30px; /* 기업 이름 입력 상자의 높이 */
+}
+
+textarea.job-box {
+    height: 100px; /* 지원 직무 텍스트박스의 높이 */
+}
+
+/* 질문 라벨 스타일 */
+label {
+    font-weight: bold;
+    margin-bottom: 5px;  /* 라벨과 텍스트박스 간 간격 추가 */
+    display: block;
+    font-size: 18px;
 }
 
 /* 리스트 항목에 마우스를 올리면 손 모양으로 변경 */
