@@ -4,7 +4,8 @@
 ## Section 3.2 index.html 최종 수정 
 
 
-![image](https://github.com/user-attachments/assets/f0cc199e-7dcf-437c-9c29-9e8aed3689dd)
+![image](https://github.com/user-attachments/assets/71e97ffc-8b3f-42cc-89c7-56996382f3ae)
+
 
 일단 현재까지 한것
 
