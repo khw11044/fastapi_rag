@@ -32,6 +32,12 @@ uploaded_files_info = []
 async def root():
     return FileResponse('static/index.html')
 
+
+# '내 자소서 쓰기' 페이지
+@app.get("/write")
+async def write_page():
+    return FileResponse('static/write.html')
+
 @app.on_event("startup")
 async def load_existing_files():
     upload_dir = "uploaded_files"
@@ -83,15 +89,23 @@ async def process_word_file(file: UploadFile = File(...)):
     if not file.filename.endswith((".docx", ".doc")):
         return {"error": "Invalid file type. Please upload a .docx or .doc file."}
 
-    # 업로드한 파일을 임시로 저장
+    # 파일 이름 중복 방지 - 같은 이름이 있으면 (1), (2) 등을 붙임
     file_location = f"{upload_dir}/{file.filename}"
+    base, ext = os.path.splitext(file_location)
+    counter = 1
+
+    while os.path.exists(file_location):
+        file_location = f"{base} ({counter}){ext}"
+        counter += 1
+
+    # 업로드한 파일을 임시로 저장
     with open(file_location, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
     # 파일 이름과 업로드 날짜 기록
     upload_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     uploaded_files_info.append({
-        "filename": file.filename,
+        "filename": os.path.basename(file_location),  # 파일 이름에 번호가 붙은 경우를 처리
         "upload_time": upload_time
     })
 
@@ -102,17 +116,14 @@ async def process_word_file(file: UploadFile = File(...)):
         full_text.append(para.text)
     
     # 워드 파일 내용을 반환
-    return {"filename": file.filename, "content": "\n".join(full_text)}
+    return {"filename": os.path.basename(file_location), "content": "\n".join(full_text)}
 
 # 업로드된 파일 목록 제공 API
 @app.get("/uploaded_files")
 async def get_uploaded_files():
     return {"files": uploaded_files_info}
 
-# '내 자소서 쓰기' 페이지
-@app.get("/write")
-async def write_page():
-    return FileResponse('static/write.html')
+
 
 # 파일 이름 변경 API
 @app.post("/rename_file")
