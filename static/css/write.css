@@ -150,3 +150,15 @@ textarea.content-box {
 .send-button:hover {
     background-color: #005f5f;
 }
+
+textarea.query-box {
+    width: 100%;
+    height: 400px;  /* rows="15"에 맞춘 높이 */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: vertical;
+    background-color: #fafafa;
+}

@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from app.api.endpoints import files
+from app.api.endpoints import files, query
 
 app = FastAPI()
 
@@ -34,3 +34,6 @@ async def write_page():
 
 # 파일 관련 라우터 등록
 app.include_router(files.router, prefix="/files", tags=["files"])
+# query 라우터 등록
+app.include_router(query.router, tags=["query"])
+
