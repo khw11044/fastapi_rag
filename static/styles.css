@@ -1,3 +1,4 @@
+/* 기본 스타일 설정 */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -27,79 +28,36 @@ button:hover {
     background-color: #005f5f;
 }
 
-/* 질문별 문단을 보여주는 텍스트박스 스타일 */
-textarea.question-box {
-    width: 60%;  /* 텍스트박스 너비를 60%로 설정 */
-    height: 300px; /* 질문별 텍스트박스 높이 설정 */
+/* 텍스트박스 스타일 설정 */
+textarea, input[type="text"] {
+    width: 60%;
     padding: 10px;
-    font-size: 16px;
+    margin: 10px 0;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    overflow-y: auto;
-    background-color: #f0f0f0;
-    white-space: pre-wrap;
-    margin: 20px auto;
-    border-radius: 5px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;  /* 텍스트박스 간 간격 추가 */
-    line-height: 1.5; /* 줄 간격 설정 */
-}
-
-/* 기업이름, 지원직무 텍스트 입력 상자 스타일 */
-input[type="text"].company-box, textarea.job-box {
-    width: 60%;  /* 텍스트박스 너비를 60%로 설정 */
-    padding: 10px;
     font-size: 16px;
-    border: 1px solid #bbb;
-    box-sizing: border-box;
-    background-color: #ffffff;
-    white-space: pre-wrap;
-    margin: 20px auto;
-    border-radius: 5px;
-    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 15px;  /* 텍스트박스 간 간격 추가 */
+    border-radius: 4px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    resize: none;
 }
 
-input[type="text"].company-box {
-    height: 30px; /* 기업 이름 입력 상자의 높이 */
+/* 질문별 텍스트박스의 스타일 */
+.question-box {
+    height: 200px; /* 기본적으로 높이를 더 크게 설정 */
 }
 
-textarea.job-box {
-    height: 100px; /* 지원 직무 텍스트박스의 높이 */
-}
-
-/* 질문 라벨 스타일 */
-label {
-    font-weight: bold;
-    margin-bottom: 5px;  /* 라벨과 텍스트박스 간 간격 추가 */
-    display: block;
-    font-size: 18px;
-}
-
-/* 리스트 항목에 마우스를 올리면 손 모양으로 변경 */
-li {
-    cursor: pointer; /* 마우스를 올리면 손 모양으로 변경 */
-    padding: 5px;
-    transition: background-color 0.3s ease; /* 색상 변화 애니메이션 추가 */
-}
-
-/* 마우스를 올리면 옅은 파란색으로 변경 */
-li:hover {
-    background-color: #e0f7ff; /* 옅은 파란색 배경 */
-    color: #008cba; /* 파란색 텍스트 */
-}
-
-/* span에 마우스를 올리면 손 모양으로 변경 */
-span.file-item {
-    cursor: pointer; /* 마우스를 올리면 손 모양으로 변경 */
-    transition: color 0.3s ease, background-color 0.3s ease;
-}
-
-/* 마우스를 올리면 옅은 파란색으로 변경 */
-span.file-item:hover {
-    color: #008cba !important; /* 파란색 텍스트 */
-    background-color: #e0f7ff !important; /* 옅은 파란색 배경 */
-    transition: color 0.3s ease, background-color 0.3s ease; /* 부드러운 애니메이션 */
+/* 기업 이름, 지원 직무, 인재상, 지원 시기 입력란 스타일 */
+.company-box,
+.job-box,
+.talent-box,
+.period-box {
+    margin-bottom: 15px;
+    font-size: 16px;
+    width: 60%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 네비게이션 바 스타일 */
@@ -131,4 +89,66 @@ span.file-item:hover {
 
 .navbar .nav-links a:hover {
     text-decoration: underline;
+}
+
+/* 리스트 항목에 마우스를 올리면 손 모양으로 변경 */
+li {
+    cursor: pointer;
+    padding: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* 마우스를 올리면 옅은 파란색으로 변경 */
+li:hover {
+    background-color: #e0f7ff;
+    color: #008cba;
+}
+
+/* 파일 이름을 나타내는 span 스타일 */
+span.file-item {
+    cursor: pointer;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* 마우스를 올리면 색상 변경 */
+span.file-item:hover {
+    color: #008cba !important;
+    background-color: #e0f7ff !important;
+}
+
+/* 텍스트박스 안의 텍스트 줄 간격 설정 */
+textarea {
+    line-height: 1.6; /* 줄 간격을 넓게 설정 */
+}
+
+/* 텍스트박스와 각 항목 사이의 간격을 설정 */
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    margin-top: 20px; /* 각 섹션 간격을 넓게 설정 */
+}
+
+/* 입력란 간의 간격 조정 */
+textarea, input[type="text"] {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* 저장 버튼 중앙 정렬 */
+#saveButton {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #008cba;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+/* 저장 버튼 hover 효과 */
+#saveButton:hover {
+    background-color: #005f5f;
 }

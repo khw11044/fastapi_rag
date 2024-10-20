@@ -4,6 +4,7 @@ langchain_text_splitters
 langchain_community 
 langchain_core 
 langchain_openai
+langchain_huggingface
 fastapi
 uvicorn
 beautifulsoup4
