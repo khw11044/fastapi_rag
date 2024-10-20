@@ -1,15 +1,12 @@
 
 # Langchain Rag FastAPI
 
-## Section 4 FastAPI 모듈화 
+## Section 5 RAG 파이프라인 
 
 
+일단 section5에서 RAG 파이프라인을 하나하나 차근차근 만들어 가보자.
 
-페이지 2개로 하고 RAG까지 하려니깐 main.py에 모든것을 담으면 너무 복잡해져서 모듈화 필요성이 느껴졌다.
-
-이번 섹션에서는 모듈화를 진행하였다.
-
-![image](https://github.com/user-attachments/assets/39b95dfa-353f-45ce-9cd2-4828d0da73b7)
+먼저 리트리버로 내용을 가져오고 보여주자.
 
 
 

@@ -24,5 +24,13 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 async def root():
     return FileResponse('static/index.html')
 
+from fastapi.responses import FileResponse
+
+# '내 자소서 쓰기' 페이지 라우트
+@app.get("/write")
+async def write_page():
+    return FileResponse('static/write.html')
+
+
 # 파일 관련 라우터 등록
 app.include_router(files.router, prefix="/files", tags=["files"])

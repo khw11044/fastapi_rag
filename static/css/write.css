@@ -1,0 +1,152 @@
+/* 전체 페이지 레이아웃 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 20px;
+    padding: 20px;
+}
+
+/* 네비게이션바 스타일 */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 15px;
+    color: white;
+}
+
+.navbar .logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar .nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.navbar .nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.navbar .nav-links a:hover {
+    text-decoration: underline;
+}
+
+
+/* 컨테이너를 좌우로 나눠서 균등 배치 */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* 좌측 부분 스타일 (비워둔 영역) */
+.left-half {
+    width: 48%;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* 우측 부분 스타일 (질문 생성 텍스트박스) */
+.right-half {
+    width: 48%;
+    padding-left: 10px;
+    box-sizing: border-box;
+}
+
+/* 가운데를 나누는 세로 줄 */
+.divider {
+    width: 1px;
+    background-color: #ccc;
+    height: 100vh;
+    margin: 0 20px;
+}
+
+/* 질문 텍스트박스와 Send 버튼을 같은 줄에 배치 */
+.question-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+/* 제목과 + 버튼을 같은 줄에 배치 */
+.title-with-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;  /* 제목과 + 버튼 사이의 간격 */
+}
+
+/* + 버튼 스타일 */
+.add-button {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    background-color: #008cba;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+/* + 버튼 호버 시 색상 변경 */
+.add-button:hover {
+    background-color: #005f5f;
+}
+
+/* 질문 및 생성 텍스트박스 스타일 */
+textarea.question-box, textarea.content-box {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+/* 질문 텍스트박스 (2줄 높이) */
+textarea.question-box {
+    height: 50px;
+    width: 85%;
+}
+
+/* 생성 텍스트박스 (6줄 높이) */
+textarea.content-box {
+    height: 120px;
+}
+
+/* Send 버튼 스타일 */
+.send-button {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    border: none;
+    background-color: #008cba;
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+/* Send 버튼 호버 시 색상 변경 */
+.send-button:hover {
+    background-color: #005f5f;
+}
