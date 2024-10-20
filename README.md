@@ -9,6 +9,7 @@
 
 이번 섹션에서는 모듈화를 진행하였다.
 
+![image](https://github.com/user-attachments/assets/39b95dfa-353f-45ce-9cd2-4828d0da73b7)
 
 
 
