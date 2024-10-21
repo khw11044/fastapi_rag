@@ -12,17 +12,28 @@ function sendQuestion(questionBox) {
         })
         .then(response => response.json())
         .then(data => {
-            // 서버로부터 검색 결과를 받아와서 queryResultBox에 표시
-            const resultBox = document.getElementById('queryResultBox');
-            resultBox.value = '';  // 결과 초기화
-            data.results.forEach(result => {
-                resultBox.value += `질문: ${result.metadata.question}\n\n`;  // 질문
-                resultBox.value += `답변: ${result.content}\n\n`;  // 답변
-                resultBox.value += `기업 이름: ${result.metadata.기업이름}\n`;  // 기업이름
-                resultBox.value += `인재상: ${result.metadata.인재상}\n`;  // 인재상
-                resultBox.value += `지원시기: ${result.metadata.지원시기}\n`;  // 지원시기
-                resultBox.value += `지원직무: ${result.metadata.지원직무}\n\n`;  // 지원직무
-                resultBox.value += `----------------------------------------------------------------\n\n`;
+            // 기존 검색 결과 초기화
+            const resultsContainer = document.getElementById('resultsContainer');
+            resultsContainer.innerHTML = ''; // 기존 결과를 비웁니다.
+
+            // 각 검색 결과마다 새로운 텍스트박스를 생성하여 결과 표시
+            data.results.forEach((result, index) => {
+                // 텍스트박스 생성
+                const resultBox = document.createElement('textarea');
+                resultBox.classList.add('result-box'); // 스타일링을 위한 클래스 추가
+                resultBox.rows = 6; // 기본적으로 6줄로 설정
+                resultBox.readOnly = true; // 수정 불가능
+
+                // 검색 결과 내용을 텍스트박스에 넣음
+                resultBox.value = `질문: ${result.metadata.question}\n\n` +
+                                  `답변: ${result.content}\n\n` +
+                                  `기업 이름: ${result.metadata.기업이름}\n` +
+                                  `인재상: ${result.metadata.인재상}\n` +
+                                  `지원시기: ${result.metadata.지원시기}\n` +
+                                  `지원직무: ${result.metadata.지원직무}`;
+
+                // 검색 결과 텍스트박스를 컨테이너에 추가
+                resultsContainer.appendChild(resultBox);
             });
         })
         .catch(error => {
