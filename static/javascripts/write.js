@@ -25,12 +25,12 @@ function sendQuestion(questionBox) {
                 resultBox.readOnly = true; // 수정 불가능
 
                 // 검색 결과 내용을 텍스트박스에 넣음
-                resultBox.value = `질문: ${result.metadata.question}\n\n` +
-                                  `답변: ${result.content}\n\n` +
+                resultBox.value = `질문: \n${result.metadata.question}\n\n` +
+                                  `답변: \n${result.content}\n\n` +
                                   `기업 이름: ${result.metadata.기업이름}\n` +
-                                  `인재상: ${result.metadata.인재상}\n` +
                                   `지원시기: ${result.metadata.지원시기}\n` +
-                                  `지원직무: ${result.metadata.지원직무}`;
+                                  `지원직무: ${result.metadata.지원직무}\n` + 
+                                  `인재상: \n${result.metadata.인재상}`;
 
                 // 검색 결과 텍스트박스를 컨테이너에 추가
                 resultsContainer.appendChild(resultBox);

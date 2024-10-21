@@ -3,6 +3,9 @@ import glob
 import yaml
 from langchain_core.documents import Document
 from langchain_teddynote.retrievers import KiwiBM25Retriever
+from langchain_community.cross_encoders import HuggingFaceCrossEncoder
+from langchain.retrievers.document_compressors import CrossEncoderReranker
+from langchain.retrievers import ContextualCompressionRetriever
 
 def get_info_yaml(path):
     with open(path, encoding='utf-8') as f:  # UTF-8 인코딩 명시
@@ -34,12 +37,22 @@ def process_query(query: str):
 
     kiwi_bm25_retriever = KiwiBM25Retriever.from_documents(all_Docs)
     answers = kiwi_bm25_retriever.invoke(query)
+    # reranker = HuggingFaceCrossEncoder(model_name="BAAI/bge-reranker-v2-m3")
+    # compressor = CrossEncoderReranker(model=reranker, top_n=1)
+    
+    # compression_retriever = ContextualCompressionRetriever(
+    #         base_compressor=compressor, base_retriever=kiwi_bm25_retriever)
+    
+    # answers = compression_retriever.invoke(query)
     
     # 결과를 출력 형태로 변환
     results = []
     for ans in answers:
+
+        texts = ans.page_content
+        lines = texts.splitlines()
         results.append({
-            "content": ans.page_content,
+            "content": "\n".join(lines[1:]),
             "metadata": ans.metadata
         })
     return results
