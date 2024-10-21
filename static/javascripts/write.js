@@ -61,12 +61,10 @@ document.getElementById('addButton').addEventListener('click', function() {
     sendButton.textContent = '보내기';  // '보내기' 텍스트로 변경
     sendButton.classList.add('send-button');
 
-
     const questionBox = document.createElement('textarea');
     questionBox.classList.add('question-box');
     questionBox.rows = 2;
 
-    
     // 엔터 키 이벤트 처리
     questionBox.addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
@@ -105,7 +103,34 @@ document.getElementById('addButton').addEventListener('click', function() {
     contentBox.rows = 6;
 
     genButton.addEventListener('click', function() {
-        // 생성하기 버튼 클릭 시 동작할 코드 추가
+        const companyName = document.getElementById('companyName').value;
+        const talent = document.getElementById('talent').value;
+        const job = document.getElementById('job').value;
+        const limit = limitBox.value;
+        const question = questionBox.value;  // 질문 텍스트 박스의 값
+        
+        // FastAPI에 POST 요청을 보내기
+        fetch('/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                companyName: companyName, // 수정된 부분
+                talent: talent,
+                job: job,
+                question: question,
+                limit: limit,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // '답변:' 텍스트 박스에 결과 표시
+            contentBox.value = data.answer;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     });
 
     container.appendChild(contentLabel);

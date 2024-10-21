@@ -154,28 +154,31 @@ input[type="text"], textarea {
 
 /* 기업 이름 입력란 */
 .company-box {
-    height: 40px; /* 텍스트 입력 필드의 높이 */
+    height: 40px; 
 }
 
 /* 인재상 입력란 */
 .talent-box {
-    height: 60px; /* 2줄 정도 높이 */
+    height: 60px; 
 }
 
 /* 지원 직무 입력란 */
 .job-box {
-    height: 60px; /* 2줄 정도 높이 */
+    height: 60px; 
 }
 
-/* 생성 텍스트박스 (6줄 높이) */
+/* 생성 텍스트박스 */
 textarea.content-box {
-    height: 120px;
+    width: 100%;
+    height: 400px !important;
+    padding: 10px;
+    font-size: 16px;
 }
 
 /* 검색 결과 텍스트박스 스타일 */
 textarea.query-box {
     width: 100%;
-    height: 400px;  /* rows="15"에 맞춘 높이 */
+    height: 400px;  
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
