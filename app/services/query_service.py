@@ -38,7 +38,7 @@ def process_query(query: str):
     kiwi_bm25_retriever = KiwiBM25Retriever.from_documents(all_Docs)
     answers = kiwi_bm25_retriever.invoke(query)
     # reranker = HuggingFaceCrossEncoder(model_name="BAAI/bge-reranker-v2-m3")
-    # compressor = CrossEncoderReranker(model=reranker, top_n=1)
+    # compressor = CrossEncoderReranker(model=reranker, top_n=5)
     
     # compression_retriever = ContextualCompressionRetriever(
     #         base_compressor=compressor, base_retriever=kiwi_bm25_retriever)

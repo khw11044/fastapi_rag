@@ -85,6 +85,14 @@ document.getElementById('addButton').addEventListener('click', function() {
     questionWrapper.appendChild(questionBox);  // 질문 텍스트박스 추가
     container.appendChild(questionWrapper);  // questionWrapper를 container에 추가
 
+    const wordlimitLabel = document.createElement('label');
+    wordlimitLabel.textContent = '글자수 제한:';
+    const limitBox = document.createElement('textarea');
+    limitBox.classList.add('limit-box');
+
+    container.appendChild(wordlimitLabel);
+    container.appendChild(limitBox);
+
     const contentLabel = document.createElement('label');
     contentLabel.textContent = '답변:';
 

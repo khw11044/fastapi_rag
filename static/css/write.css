@@ -94,6 +94,16 @@ textarea.question-box {
     margin-top: 5px;  /* 라벨과 텍스트박스 사이의 간격 */
 }
 
+textarea.limit-box {
+    height: 50px;
+    width: 100%;  /* 너비를 꽉 채워줌 */
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-top: 5px;  /* 라벨과 텍스트박스 사이의 간격 */
+}
+
 
 /* 제목과 + 버튼을 같은 줄에 배치 */
 .title-with-button {
