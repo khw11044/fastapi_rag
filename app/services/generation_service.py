@@ -18,10 +18,16 @@ class RagPipeline:
         해당 질문에 대한 답변에 대해 다음 규칙을 지켜 작성해주세요. 
         답변은 반드시 글자수 {limit} 미만으로 작성해주세요.
 
-        ### 지원 기업 정보:
+        # 지원 기업:
         {company}
+        
+        # 기업 인재상:
+        {talent}
+        
+        # 지원 직무:
+        {job}
 
-        ### 질문:
+        # 질문:
         {question}
 
         ### 답변:
@@ -32,12 +38,14 @@ class RagPipeline:
 
         return rag_chain
 
-    def generate_answer(self, company: str, question: str, limit: str):
+    def generate_answer(self, question: str, companyName: str, talent: str, job: str, limit: str):
         # chain에 입력을 전달하여 RAG 모델에서 답변 생성
         
         inputs = {
-            "company": company,
             "question": question,
+            "company": companyName,
+            "talent": talent,
+            "job": job,
             "limit": limit
         }
 
