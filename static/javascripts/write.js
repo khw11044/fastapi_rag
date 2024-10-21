@@ -17,7 +17,7 @@ function sendQuestion(questionBox) {
             resultsContainer.innerHTML = ''; // 기존 결과를 비웁니다.
 
             // 각 검색 결과마다 새로운 텍스트박스를 생성하여 결과 표시
-            data.results.forEach((result, index) => {
+            data.results.forEach((result) => {
                 // 텍스트박스 생성
                 const resultBox = document.createElement('textarea');
                 resultBox.classList.add('result-box'); // 스타일링을 위한 클래스 추가
@@ -109,6 +109,14 @@ document.getElementById('addButton').addEventListener('click', function() {
         const limit = limitBox.value;
         const question = questionBox.value;  // 질문 텍스트 박스의 값
         
+        const results = document.querySelectorAll('#resultsContainer .result-box'); // 결과 박스 선택
+        let context = '' 
+
+        results.forEach((resultBox) => {
+            const lines = resultBox.value; // 줄바꿈으로 나누기
+            context += lines + ' \n\n AAA \n\n';
+        });
+        
         // FastAPI에 POST 요청을 보내기
         fetch('/generate', {
             method: 'POST',
@@ -116,11 +124,12 @@ document.getElementById('addButton').addEventListener('click', function() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                companyName: companyName, // 수정된 부분
+                companyName: companyName,
                 talent: talent,
                 job: job,
                 question: question,
                 limit: limit,
+                context: context,  // context 포함
             }),
         })
         .then(response => response.json())
