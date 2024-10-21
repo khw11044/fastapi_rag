@@ -78,12 +78,11 @@ body {
     width: 100%;  /* 구분선이 부모 요소의 전체 너비를 차지하도록 설정 */
 }
 
-/* 질문 텍스트박스와 보내기 버튼을 배치 */
+/* 질문 텍스트박스와 보내기 버튼을 같은 줄에 배치 */
 .question-wrapper {
     display: block;  /* Flex를 제거하여 수직 배치 */
     margin-bottom: 5px;  /* 질문 박스와의 간격 */
 }
-
 /* 질문 텍스트박스 (2줄 높이) */
 textarea.question-box {
     height: 50px;
@@ -95,21 +94,6 @@ textarea.question-box {
     margin-top: 5px;  /* 라벨과 텍스트박스 사이의 간격 */
 }
 
-/* 보내기 버튼 스타일 */
-.send-button {
-    height: 30px;  
-    font-size: 14px;  
-    border: 1px solid #ccc;  
-    border-radius: 5px;  
-    background-color: white; 
-    color: black;  
-    cursor: pointer;  
-}
-
-/* 보내기 버튼 hover 시 색상 변경 */
-.send-button:hover {
-    background-color: #f0f0f0;
-}
 
 /* 제목과 + 버튼을 같은 줄에 배치 */
 .title-with-button {
@@ -171,22 +155,6 @@ input[type="text"], textarea {
 /* 지원 직무 입력란 */
 .job-box {
     height: 60px; /* 2줄 정도 높이 */
-}
-
-/* 질문 및 생성 텍스트박스 스타일 */
-textarea.question-box, textarea.content-box {
-    width: 80%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    resize: vertical;
-}
-
-/* 질문 텍스트박스 (2줄 높이) */
-textarea.question-box {
-    height: 50px;
 }
 
 /* 생성 텍스트박스 (6줄 높이) */

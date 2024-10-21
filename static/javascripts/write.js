@@ -42,7 +42,6 @@ function sendQuestion(questionBox) {
     }
 }
 
-// + 버튼 클릭 시 질문 및 생성 텍스트박스를 추가하는 함수
 document.getElementById('addButton').addEventListener('click', function() {
     const container = document.getElementById('questionsContainer');
 
@@ -62,11 +61,12 @@ document.getElementById('addButton').addEventListener('click', function() {
     sendButton.textContent = '보내기';  // '보내기' 텍스트로 변경
     sendButton.classList.add('send-button');
 
-    // 질문 텍스트박스는 questionWrapper 아래에 추가하지 않고 container 아래에 추가
+
     const questionBox = document.createElement('textarea');
     questionBox.classList.add('question-box');
     questionBox.rows = 2;
 
+    
     // 엔터 키 이벤트 처리
     questionBox.addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
@@ -79,20 +79,28 @@ document.getElementById('addButton').addEventListener('click', function() {
         sendQuestion(questionBox);
     });
 
-    // '질문:' 라벨과 보내기 버튼을 같은 줄에 추가
+    // '질문:' 라벨과 질문 텍스트박스, 보내기 버튼을 같은 줄에 추가
     questionWrapper.appendChild(questionLabel);
-    questionWrapper.appendChild(sendButton);
+    questionWrapper.appendChild(sendButton);   // 보내기 버튼 추가
+    questionWrapper.appendChild(questionBox);  // 질문 텍스트박스 추가
     container.appendChild(questionWrapper);  // questionWrapper를 container에 추가
 
-    // 질문 텍스트박스를 container에 추가하여 아래에 배치
-    container.appendChild(questionBox); // 질문 텍스트박스를 아래에 추가
-
     const contentLabel = document.createElement('label');
-    contentLabel.textContent = '생성:';
+    contentLabel.textContent = '답변:';
+
+    const genButton = document.createElement('button');
+    genButton.textContent = '생성하기';  // '생성하기' 텍스트로 변경
+    genButton.classList.add('gen-button');
+    
     const contentBox = document.createElement('textarea');
     contentBox.classList.add('content-box');
     contentBox.rows = 6;
 
+    genButton.addEventListener('click', function() {
+        // 생성하기 버튼 클릭 시 동작할 코드 추가
+    });
+
     container.appendChild(contentLabel);
+    container.appendChild(genButton);
     container.appendChild(contentBox);
 });
