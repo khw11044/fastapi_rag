@@ -30,9 +30,15 @@ function sendQuestion(questionBox) {
         });
     }
 }
+
 // + 버튼 클릭 시 질문 및 생성 텍스트박스를 추가하는 함수
 document.getElementById('addButton').addEventListener('click', function() {
     const container = document.getElementById('questionsContainer');
+
+    // 구분선 추가
+    const separator = document.createElement('div');
+    separator.classList.add('separator');
+    container.appendChild(separator);
 
     // 질문 텍스트박스와 버튼을 같은 줄에 배치
     const questionWrapper = document.createElement('div');
