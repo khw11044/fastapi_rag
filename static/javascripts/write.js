@@ -58,13 +58,14 @@ document.getElementById('addButton').addEventListener('click', function() {
     const questionLabel = document.createElement('label');
     questionLabel.textContent = '질문:';
 
+    const sendButton = document.createElement('button');
+    sendButton.textContent = '보내기';  // '보내기' 텍스트로 변경
+    sendButton.classList.add('send-button');
+
+    // 질문 텍스트박스는 questionWrapper 아래에 추가하지 않고 container 아래에 추가
     const questionBox = document.createElement('textarea');
     questionBox.classList.add('question-box');
     questionBox.rows = 2;
-
-    const sendButton = document.createElement('button');
-    sendButton.innerHTML = '📤';  // 'send' 아이콘
-    sendButton.classList.add('send-button');
 
     // 엔터 키 이벤트 처리
     questionBox.addEventListener('keydown', function(event) {
@@ -78,10 +79,13 @@ document.getElementById('addButton').addEventListener('click', function() {
         sendQuestion(questionBox);
     });
 
+    // '질문:' 라벨과 보내기 버튼을 같은 줄에 추가
     questionWrapper.appendChild(questionLabel);
-    questionWrapper.appendChild(questionBox);
     questionWrapper.appendChild(sendButton);
-    container.appendChild(questionWrapper);
+    container.appendChild(questionWrapper);  // questionWrapper를 container에 추가
+
+    // 질문 텍스트박스를 container에 추가하여 아래에 배치
+    container.appendChild(questionBox); // 질문 텍스트박스를 아래에 추가
 
     const contentLabel = document.createElement('label');
     contentLabel.textContent = '생성:';

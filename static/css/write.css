@@ -78,12 +78,37 @@ body {
     width: 100%;  /* 구분선이 부모 요소의 전체 너비를 차지하도록 설정 */
 }
 
-/* 질문 텍스트박스와 Send 버튼을 같은 줄에 배치 */
+/* 질문 텍스트박스와 보내기 버튼을 배치 */
 .question-wrapper {
-    display: flex;  /* Flex로 변경하여 수평 정렬 */
-    align-items: center;
-    gap: 10px;  /* 버튼과 텍스트박스 간 간격 */
-    margin-bottom: 15px;
+    display: block;  /* Flex를 제거하여 수직 배치 */
+    margin-bottom: 5px;  /* 질문 박스와의 간격 */
+}
+
+/* 질문 텍스트박스 (2줄 높이) */
+textarea.question-box {
+    height: 50px;
+    width: 100%;  /* 너비를 꽉 채워줌 */
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-top: 5px;  /* 라벨과 텍스트박스 사이의 간격 */
+}
+
+/* 보내기 버튼 스타일 */
+.send-button {
+    height: 30px;  
+    font-size: 14px;  
+    border: 1px solid #ccc;  
+    border-radius: 5px;  
+    background-color: white; 
+    color: black;  
+    cursor: pointer;  
+}
+
+/* 보내기 버튼 hover 시 색상 변경 */
+.send-button:hover {
+    background-color: #f0f0f0;
 }
 
 /* 제목과 + 버튼을 같은 줄에 배치 */
@@ -117,7 +142,7 @@ body {
 /* 기업 이름, 인재상, 지원 직무 입력란 스타일 */
 label {
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
     display: block;
     margin-top: 20px;
 }
@@ -150,7 +175,7 @@ input[type="text"], textarea {
 
 /* 질문 및 생성 텍스트박스 스타일 */
 textarea.question-box, textarea.content-box {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -162,33 +187,11 @@ textarea.question-box, textarea.content-box {
 /* 질문 텍스트박스 (2줄 높이) */
 textarea.question-box {
     height: 50px;
-    width: 85%;  /* Send 버튼 옆에 자리할 수 있도록 너비 조정 */
 }
 
 /* 생성 텍스트박스 (6줄 높이) */
 textarea.content-box {
     height: 120px;
-}
-
-/* Send 버튼 스타일 */
-.send-button {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-    border: none;
-    background-color: #008cba;
-    color: white;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.3s ease;
-}
-
-/* Send 버튼 호버 시 색상 변경 */
-.send-button:hover {
-    background-color: #005f5f;
 }
 
 /* 검색 결과 텍스트박스 스타일 */
